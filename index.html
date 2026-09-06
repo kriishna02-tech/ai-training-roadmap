@@ -1,0 +1,843 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AI Engineering Roadmap Tracker</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --panel: #111827;
+            --panel2: #172033;
+            --text: #e5e7eb;
+            --muted: #94a3b8;
+            --accent: #38bdf8;
+            --ok: #22c55e;
+            --warn: #f59e0b;
+            --border: #263244;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+            background: linear-gradient(180deg, #0b1220, #0f172a);
+            color: var(--text)
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: rgba(15, 23, 42, .94);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 20px
+        }
+
+        .wrap {
+            max-width: 1180px;
+            margin: auto
+        }
+
+        h1 {
+            font-size: clamp(24px, 4vw, 40px);
+            margin: 0 0 6px
+        }
+
+        .sub {
+            color: var(--muted);
+            margin: 0
+        }
+
+        nav {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            background: #172033;
+            padding: 7px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            font-size: 14px
+        }
+
+        main {
+            padding: 24px 20px 60px
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px
+        }
+
+        .card {
+            background: linear-gradient(180deg, var(--panel), var(--panel2));
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 18px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .18)
+        }
+
+        .card h2,
+        .card h3 {
+            margin-top: 0
+        }
+
+        .muted {
+            color: var(--muted)
+        }
+
+        .progress {
+            height: 14px;
+            background: #0b1220;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            overflow: hidden
+        }
+
+        .bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent), var(--ok));
+            transition: .25s
+        }
+
+        .big {
+            font-size: 28px;
+            font-weight: 800
+        }
+
+        .section {
+            margin-top: 28px;
+            scroll-margin-top: 100px
+        }
+
+        .item {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            padding: 8px 0;
+            border-bottom: 1px dashed #293548
+        }
+
+        .item:last-child {
+            border-bottom: 0
+        }
+
+        input[type=checkbox] {
+            transform: scale(1.15);
+            margin-top: 3px;
+            accent-color: var(--ok)
+        }
+
+        button {
+            background: var(--accent);
+            border: 0;
+            color: #062033;
+            padding: 9px 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer
+        }
+
+        button.secondary {
+            background: #253147;
+            color: var(--text);
+            border: 1px solid var(--border)
+        }
+
+        textarea,
+        input[type=number],
+        input[type=text],
+        select {
+            width: 100%;
+            background: #0b1220;
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+            vertical-align: top
+        }
+
+        .badge {
+            display: inline-block;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 4px 8px;
+            color: var(--muted);
+            font-size: 12px
+        }
+
+        .score-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px
+        }
+
+        footer {
+            color: var(--muted);
+            text-align: center;
+            padding: 30px 20px
+        }
+
+        @media(max-width:650px) {
+            .score-grid {
+                grid-template-columns: 1fr
+            }
+
+            table {
+                font-size: 13px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="wrap">
+            <h1>AI Engineering Roadmap Tracker</h1>
+            <p class="sub">8-month capability-first roadmap • learn → practice → debug → build → test → assess → mastery
+                gate</p>
+            <nav>
+                <a href="#dashboard">Dashboard</a><a href="#deadlines">Deadlines</a><a href="#current">Current
+                    Level</a><a href="#roadmap">Roadmap</a>
+                <a href="#projects">Projects</a><a href="#daily">Daily Tracker</a><a href="#mastery">Mastery</a>
+            </nav>
+        </div>
+    </header>
+    <main class="wrap">
+
+        <section id="dashboard" class="section">
+            <div class="grid">
+                <div class="card">
+                    <div class="muted">Overall roadmap progress</div>
+                    <div class="big" id="overallPct">0%</div>
+                    <div class="progress">
+                        <div class="bar" id="overallBar"></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="muted">Target</div>
+                    <h3>Production AI Engineer / AI Application Engineer</h3>
+                    <p class="muted">Understand unfamiliar projects, build features, debug, test, Dockerize, deploy and
+                        maintain them.</p>
+                </div>
+                <div class="card">
+                    <div class="muted">Current starting point</div>
+                    <h3>Phase 1 — Foundations</h3>
+                    <p class="muted">Start with computer fundamentals, then Linux/terminal, networking/HTTP, Git deeper,
+                        Python and DSA.</p>
+                </div>
+                <div class="card">
+                    <div class="muted">Final target deadline</div>
+                    <div class="big">19 Apr 2027</div>
+                    <p class="muted">About 8 months from the roadmap start. Use the milestone table below to stay on
+                        pace.</p>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="deadlines" class="section">
+            <h2>8-Month Deadlines</h2>
+            <div class="card">
+                <p class="muted">Target window: <strong>25 Aug 2026 → may  2027</strong>. These are target dates, not
+                    permission to skip mastery gates. If a phase slips, revise the next dates instead of rushing weak
+                    fundamentals.</p>
+                <table>
+                    <tr>
+                        <th>Deadline</th>
+                        <th>You should have finished</th>
+                        <th>Capability target</th>
+                    </tr>
+                    <tr>
+                        <td><strong>10 aug 2026</strong></td>
+                        <td>Phase 1: Computer fundamentals, Linux/Terminal, Networking, Git deeper, Python foundations
+                        </td>
+                        <td>Comfortable using the terminal, explaining basic HTTP/network flow, using Git properly, and
+                            writing useful Python programs.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>30 nov 2026</strong></td>
+                        <td>Python deeper + SQL/Databases + HTML/CSS review + JavaScript/HTTP basics</td>
+                        <td>Process files/data in Python, query relational databases, and understand browser ↔ server
+                            communication.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>10 jan 2026</strong></td>
+                        <td>Django, REST APIs, Authentication, Testing, Security + Django Notes project</td>
+                        <td>Build a database-backed web app with auth, CRUD, REST APIs and tests.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>15 feb 2027</strong></td>
+                        <td>Docker, Redis, Celery, background jobs, PDF/DOCX processing</td>
+                        <td>Containerize an application and build background document-processing workflows.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>10 march 2027</strong></td>
+                        <td>Cloud/deployment, CI/CD, NumPy/Pandas deeper, ML fundamentals, Neural Networks</td>
+                        <td>Deploy/test applications and understand the ML foundations needed for modern AI systems.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>30 Mar 2027</strong></td>
+                        <td>Transformers, LLMs, LLM APIs, structured outputs, LLM evaluation</td>
+                        <td>Add reliable LLM features to a backend and evaluate their quality/failures.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>15 Apr 2027</strong></td>
+                        <td>Embeddings, Vector Search, RAG from scratch, Qdrant/LlamaIndex</td>
+                        <td>Build and debug a grounded RAG pipeline without blindly depending on frameworks.</td>
+                    </tr>
+                    <tr>
+                        <td><strong> may 2027</strong></td>
+                        <td>Advanced RAG, AI Security, Observability, System Design + Production AI Capstone</td>
+                        <td>Design, build, test, secure, Dockerize and reason about a production AI application
+                            end-to-end.</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <section id="current" class="section">
+            <h2>Current Diagnostic Baseline</h2>
+            <div class="card">
+                <table>
+                    <tr>
+                        <th>Area</th>
+                        <th>Current status</th>
+                    </tr>
+                    <tr>
+                        <td>C / C++</td>
+                        <td>Some experience; fundamentals need validation</td>
+                    </tr>
+                    <tr>
+                        <td>DSA</td>
+                        <td>Some practice; O(n²) reasoning was good, duplicate-detection strategy needs work</td>
+                    </tr>
+                    <tr>
+                        <td>HTML / CSS</td>
+                        <td>Basic knowledge; CSS display vs visibility understood</td>
+                    </tr>
+                    <tr>
+                        <td>Git / GitHub</td>
+                        <td>Can push from VS Code; staging/commit/push mental model needs strengthening</td>
+                    </tr>
+                    <tr>
+                        <td>Java</td>
+                        <td>Currently learning</td>
+                    </tr>
+                    <tr>
+                        <td>Operating Systems</td>
+                        <td>Currently learning</td>
+                    </tr>
+                    <tr>
+                        <td>Python</td>
+                        <td>Not yet solid; references/mutability need to be learned</td>
+                    </tr>
+                    <tr>
+                        <td>Linux / Terminal</td>
+                        <td>Not learned yet</td>
+                    </tr>
+                    <tr>
+                        <td>Networking / HTTP</td>
+                        <td>Not learned yet</td>
+                    </tr>
+                    <tr>
+                        <td>SQL / Databases</td>
+                        <td>Not learned yet</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <section id="roadmap" class="section">
+            <h2>Roadmap</h2>
+            <div class="grid">
+
+                <div class="card phase-card">
+                    <h3>Phase 1 — Foundations</h3>
+                    <div class="progress">
+                        <div class="bar phase-bar"></div>
+                    </div>
+                    <p class="muted phase-pct">0% complete</p>
+                    <label class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 1 — Foundations::Computer fundamentals"><span>Computer
+                            fundamentals</span></label><label class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 1 — Foundations::Linux"><span>Linux</span></label><label class="item"><input
+                            class="roadmap-check" type="checkbox"
+                            data-key="Phase 1 — Foundations::Terminal"><span>Terminal</span></label><label
+                        class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 1 — Foundations::Networking"><span>Networking</span></label><label
+                        class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 1 — Foundations::Git"><span>Git</span></label><label class="item"><input
+                            class="roadmap-check" type="checkbox"
+                            data-key="Phase 1 — Foundations::Python"><span>Python</span></label><label
+                        class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 1 — Foundations::DSA"><span>DSA</span></label>
+                </div>
+                <div class="card phase-card">
+                    <h3>Phase 2 — Backend &amp; Web</h3>
+                    <div class="progress">
+                        <div class="bar phase-bar"></div>
+                    </div>
+                    <p class="muted phase-pct">0% complete</p>
+                    <label class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 2 — Backend &amp; Web::NumPy"><span>NumPy</span></label><label
+                        class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 2 — Backend &amp; Web::SQL"><span>SQL</span></label><label
+                        class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 2 — Backend &amp; Web::Databases"><span>Databases</span></label><label
+                        class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 2 — Backend &amp; Web::HTML"><span>HTML</span></label><label
+                        class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 2 — Backend &amp; Web::CSS"><span>CSS</span></label><label
+                        class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 2 — Backend &amp; Web::JavaScript"><span>JavaScript</span></label><label
+                        class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 2 — Backend &amp; Web::HTTP"><span>HTTP</span></label><label
+                        class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 2 — Backend &amp; Web::Django"><span>Django</span></label><label
+                        class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 2 — Backend &amp; Web::REST APIs"><span>REST APIs</span></label><label
+                        class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 2 — Backend &amp; Web::Authentication"><span>Authentication</span></label><label
+                        class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 2 — Backend &amp; Web::Testing"><span>Testing</span></label><label
+                        class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 2 — Backend &amp; Web::Security"><span>Security</span></label>
+                </div>
+                <div class="card phase-card">
+                    <h3>Phase 3 — Production App Engineering</h3>
+                    <div class="progress">
+                        <div class="bar phase-bar"></div>
+                    </div>
+                    <p class="muted phase-pct">0% complete</p>
+                    <label class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 3 — Production App Engineering::Docker"><span>Docker</span></label><label
+                        class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 3 — Production App Engineering::Redis"><span>Redis</span></label><label
+                        class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 3 — Production App Engineering::Celery"><span>Celery</span></label><label
+                        class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 3 — Production App Engineering::Background jobs"><span>Background
+                            jobs</span></label><label class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 3 — Production App Engineering::PDF processing"><span>PDF
+                            processing</span></label><label class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 3 — Production App Engineering::DOCX generation"><span>DOCX
+                            generation</span></label><label class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 3 — Production App Engineering::External APIs"><span>External
+                            APIs</span></label><label class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 3 — Production App Engineering::Cloud"><span>Cloud</span></label><label
+                        class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 3 — Production App Engineering::CI/CD"><span>CI/CD</span></label>
+                </div>
+                <div class="card phase-card">
+                    <h3>Phase 4 — ML &amp; LLM Engineering</h3>
+                    <div class="progress">
+                        <div class="bar phase-bar"></div>
+                    </div>
+                    <p class="muted phase-pct">0% complete</p>
+                    <label class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 4 — ML &amp; LLM Engineering::NumPy/Pandas deeper"><span>NumPy/Pandas
+                            deeper</span></label><label class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 4 — ML &amp; LLM Engineering::ML fundamentals"><span>ML
+                            fundamentals</span></label><label class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 4 — ML &amp; LLM Engineering::Neural networks"><span>Neural
+                            networks</span></label><label class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 4 — ML &amp; LLM Engineering::Transformers"><span>Transformers</span></label><label
+                        class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 4 — ML &amp; LLM Engineering::LLMs"><span>LLMs</span></label><label
+                        class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 4 — ML &amp; LLM Engineering::LLM APIs"><span>LLM APIs</span></label><label
+                        class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 4 — ML &amp; LLM Engineering::Prompt engineering"><span>Prompt
+                            engineering</span></label><label class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 4 — ML &amp; LLM Engineering::Structured outputs"><span>Structured
+                            outputs</span></label><label class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 4 — ML &amp; LLM Engineering::LLM evaluation"><span>LLM
+                            evaluation</span></label>
+                </div>
+                <div class="card phase-card">
+                    <h3>Phase 5 — RAG &amp; Production AI</h3>
+                    <div class="progress">
+                        <div class="bar phase-bar"></div>
+                    </div>
+                    <p class="muted phase-pct">0% complete</p>
+                    <label class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 5 — RAG &amp; Production AI::Embeddings"><span>Embeddings</span></label><label
+                        class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 5 — RAG &amp; Production AI::Vector search"><span>Vector
+                            search</span></label><label class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 5 — RAG &amp; Production AI::RAG"><span>RAG</span></label><label
+                        class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 5 — RAG &amp; Production AI::Qdrant"><span>Qdrant</span></label><label
+                        class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 5 — RAG &amp; Production AI::LlamaIndex"><span>LlamaIndex</span></label><label
+                        class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 5 — RAG &amp; Production AI::Advanced RAG"><span>Advanced
+                            RAG</span></label><label class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 5 — RAG &amp; Production AI::AI security"><span>AI
+                            security</span></label><label class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 5 — RAG &amp; Production AI::Observability"><span>Observability</span></label><label
+                        class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 5 — RAG &amp; Production AI::System design"><span>System
+                            design</span></label><label class="item"><input class="roadmap-check" type="checkbox"
+                            data-key="Phase 5 — RAG &amp; Production AI::Production AI"><span>Production
+                            AI</span></label>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="section">
+            <h2>Major Projects</h2>
+            <div class="grid">
+
+                <div class="card">
+                    <h3>Project 1 — Python Data/Utility Suite</h3>
+                    <label class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 1 — Python Data/Utility Suite::File Organizer"><span>File
+                            Organizer</span></label><label class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 1 — Python Data/Utility Suite::Task Manager"><span>Task
+                            Manager</span></label><label class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 1 — Python Data/Utility Suite::Expense / Student / Sales Analyzer"><span>Expense
+                            / Student / Sales Analyzer</span></label>
+                </div>
+                <div class="card">
+                    <h3>Project 2 — SQL + Django Notes Application</h3>
+                    <label class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 2 — SQL + Django Notes Application::Registration/login/logout"><span>Registration/login/logout</span></label><label
+                        class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 2 — SQL + Django Notes Application::Authentication &amp; authorization"><span>Authentication
+                            &amp; authorization</span></label><label class="item"><input class="project-check"
+                            type="checkbox"
+                            data-key="Project 2 — SQL + Django Notes Application::CRUD notes/tags"><span>CRUD
+                            notes/tags</span></label><label class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 2 — SQL + Django Notes Application::Search &amp; pagination"><span>Search
+                            &amp; pagination</span></label><label class="item"><input class="project-check"
+                            type="checkbox"
+                            data-key="Project 2 — SQL + Django Notes Application::Validation &amp; error handling"><span>Validation
+                            &amp; error handling</span></label><label class="item"><input class="project-check"
+                            type="checkbox"
+                            data-key="Project 2 — SQL + Django Notes Application::Tests"><span>Tests</span></label><label
+                        class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 2 — SQL + Django Notes Application::Docker"><span>Docker</span></label><label
+                        class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 2 — SQL + Django Notes Application::CI/CD"><span>CI/CD</span></label>
+                </div>
+                <div class="card">
+                    <h3>Project 3 — Study Material / Question Paper Generator</h3>
+                    <label class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 3 — Study Material / Question Paper Generator::PDF upload"><span>PDF
+                            upload</span></label><label class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 3 — Study Material / Question Paper Generator::PyMuPDF text extraction"><span>PyMuPDF
+                            text extraction</span></label><label class="item"><input class="project-check"
+                            type="checkbox"
+                            data-key="Project 3 — Study Material / Question Paper Generator::Cleaning"><span>Cleaning</span></label><label
+                        class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 3 — Study Material / Question Paper Generator::LLM API"><span>LLM
+                            API</span></label><label class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 3 — Study Material / Question Paper Generator::Structured output"><span>Structured
+                            output</span></label><label class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 3 — Study Material / Question Paper Generator::DOCX export"><span>DOCX
+                            export</span></label><label class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 3 — Study Material / Question Paper Generator::Celery + Redis"><span>Celery
+                            + Redis</span></label><label class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 3 — Study Material / Question Paper Generator::Retries"><span>Retries</span></label><label
+                        class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 3 — Study Material / Question Paper Generator::Docker"><span>Docker</span></label>
+                </div>
+                <div class="card">
+                    <h3>Project 4 — LLM Evaluation Dashboard</h3>
+                    <label class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 4 — LLM Evaluation Dashboard::Prompt dataset"><span>Prompt
+                            dataset</span></label><label class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 4 — LLM Evaluation Dashboard::Model comparison"><span>Model
+                            comparison</span></label><label class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 4 — LLM Evaluation Dashboard::Rubrics"><span>Rubrics</span></label><label
+                        class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 4 — LLM Evaluation Dashboard::Scores"><span>Scores</span></label><label
+                        class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 4 — LLM Evaluation Dashboard::Failure taxonomy"><span>Failure
+                            taxonomy</span></label><label class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 4 — LLM Evaluation Dashboard::Structured JSON output"><span>Structured
+                            JSON output</span></label><label class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 4 — LLM Evaluation Dashboard::Regression testing"><span>Regression
+                            testing</span></label><label class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 4 — LLM Evaluation Dashboard::Evaluation pipeline"><span>Evaluation
+                            pipeline</span></label>
+                </div>
+                <div class="card">
+                    <h3>Project 5 — RAG From Scratch</h3>
+                    <label class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 5 — RAG From Scratch::PDF extraction"><span>PDF
+                            extraction</span></label><label class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 5 — RAG From Scratch::Cleaning"><span>Cleaning</span></label><label
+                        class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 5 — RAG From Scratch::Chunking"><span>Chunking</span></label><label
+                        class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 5 — RAG From Scratch::Embeddings"><span>Embeddings</span></label><label
+                        class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 5 — RAG From Scratch::Vector storage"><span>Vector
+                            storage</span></label><label class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 5 — RAG From Scratch::Similarity search"><span>Similarity
+                            search</span></label><label class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 5 — RAG From Scratch::Top-K retrieval"><span>Top-K
+                            retrieval</span></label><label class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 5 — RAG From Scratch::Context"><span>Context</span></label><label
+                        class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 5 — RAG From Scratch::LLM answer"><span>LLM answer</span></label><label
+                        class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 5 — RAG From Scratch::Sources/citations"><span>Sources/citations</span></label>
+                </div>
+                <div class="card">
+                    <h3>Project 6 — Production RAG</h3>
+                    <label class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 6 — Production RAG::Django"><span>Django</span></label><label
+                        class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 6 — Production RAG::MySQL"><span>MySQL</span></label><label
+                        class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 6 — Production RAG::Redis"><span>Redis</span></label><label
+                        class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 6 — Production RAG::Celery"><span>Celery</span></label><label
+                        class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 6 — Production RAG::Qdrant"><span>Qdrant</span></label><label
+                        class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 6 — Production RAG::Docker"><span>Docker</span></label><label
+                        class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 6 — Production RAG::LLM API"><span>LLM API</span></label><label
+                        class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 6 — Production RAG::Background PDF processing"><span>Background PDF
+                            processing</span></label><label class="item"><input class="project-check" type="checkbox"
+                            data-key="Project 6 — Production RAG::Production architecture"><span>Production
+                            architecture</span></label>
+                </div>
+            </div>
+        </section>
+
+        <section id="daily" class="section">
+            <h2>Daily Learning System</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Default 3-hour structure</h3>
+                    <div class="item"><span>•</span><span>60 min — Study</span></div>
+                    <div class="item"><span>•</span><span>90 min — Coding / Building / Questions</span></div>
+                    <div class="item"><span>•</span><span>30 min — Review / Debugging</span></div>
+                    <div class="item"><span>•</span><span>Start each new day with spaced review of previous mistakes and
+                            weak areas</span></div>
+                    <div class="item"><span>•</span><span>Normal programming topics: 20–30 questions</span></div>
+                    <div class="item"><span>•</span><span>Major foundations: 25–40 questions</span></div>
+                    <div class="item"><span>•</span><span>Assessment days: 40–50 questions</span></div>
+                    <div class="item"><span>•</span><span>Do not move forward only because lessons were watched; pass a
+                            mastery gate</span></div>
+                </div>
+                <div class="card">
+                    <h3>Today</h3>
+                    <label>Date<input type="text" id="dayDate" placeholder="e.g. 19 Aug 2026"></label><br><br>
+                    <label>Topic<input type="text" id="dayTopic" placeholder="e.g. CPU, RAM, processes"></label><br><br>
+                    <label>Study minutes<input type="number" id="studyMin" min="0" value="0"></label><br><br>
+                    <label>Coding / questions minutes<input type="number" id="codeMin" min="0"
+                            value="0"></label><br><br>
+                    <label>Review / debugging minutes<input type="number" id="reviewMin" min="0"
+                            value="0"></label><br><br>
+                    <label>What I learned / mistakes<textarea id="notes" rows="6"
+                            placeholder="Write key concepts, mistakes, questions..."></textarea></label><br>
+                    <button onclick="saveDaily()">Save Today</button>
+                    <button class="secondary" onclick="clearDaily()">Clear</button>
+                    <p id="saveMsg" class="muted"></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="mastery" class="section">
+            <h2>Mastery Score</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Topic score</h3>
+                    <label>Topic<input id="masteryTopic" type="text" placeholder="e.g. Python Lists"></label><br><br>
+                    <div class="score-grid">
+                        <label>Basic %<input id="mBasic" type="number" min="0" max="100"></label>
+                        <label>Intermediate %<input id="mInter" type="number" min="0" max="100"></label>
+                        <label>Advanced %<input id="mAdv" type="number" min="0" max="100"></label>
+                        <label>Debugging %<input id="mDebug" type="number" min="0" max="100"></label>
+                    </div><br>
+                    <label>Project<select id="mProject">
+                            <option>NOT TESTED</option>
+                            <option>PASS</option>
+                            <option>FAIL</option>
+                        </select></label><br><br>
+                    <button onclick="saveMastery()">Save Mastery</button>
+                    <p id="masteryResult" class="muted"></p>
+                </div>
+                <div class="card">
+                    <h3>Mastery rules</h3>
+                    <div class="item"><span class="badge">90%+</span><span>Strong mastery</span></div>
+                    <div class="item"><span class="badge">80–89%</span><span>Pass</span></div>
+                    <div class="item"><span class="badge">70–79%</span><span>Targeted revision</span></div>
+                    <div class="item"><span class="badge">&lt;70%</span><span>Do not advance; revise and retest</span>
+                    </div>
+                    <p class="muted">Saved mastery records remain in this browser.</p>
+                    <div id="masteryHistory"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Capability Gates</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>After Python</h3>
+                    <p>Build a medium-sized Python CLI/application without a tutorial.</p>
+                </div>
+                <div class="card">
+                    <h3>After SQL + Django</h3>
+                    <p>Build a database-backed web application with authentication and REST APIs.</p>
+                </div>
+                <div class="card">
+                    <h3>After Docker</h3>
+                    <p>Take an existing application and containerize it.</p>
+                </div>
+                <div class="card">
+                    <h3>After document processing</h3>
+                    <p>Build PDF → text → AI → DOCX pipelines.</p>
+                </div>
+                <div class="card">
+                    <h3>After LLM engineering</h3>
+                    <p>Add reliable LLM features to a backend.</p>
+                </div>
+                <div class="card">
+                    <h3>After RAG</h3>
+                    <p>Build and debug RAG from scratch.</p>
+                </div>
+                <div class="card">
+                    <h3>Final production AI gate</h3>
+                    <p>Understand, run, modify, debug, test, Dockerize, deploy, and maintain an unfamiliar AI
+                        application.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="card">
+                <h2>Learning Rules</h2>
+                <p>For each topic: <strong>Learn → Practice → Questions → Debug → Build → Test → Break It → Fix It →
+                        Project → Assessment → Mastery Gate → Next Topic.</strong></p>
+                <p class="muted">Questions should be topic-specific and progressive. Answers are attempted first.
+                    Repeated mistakes trigger revision instead of automatic advancement. Every serious feature should
+                    include “What can break?” and tests.</p>
+            </div>
+        </section>
+
+    </main>
+    <footer>Progress is stored in your browser using localStorage. Keep this HTML file in a safe folder or back it up to
+        GitHub.</footer>
+
+    <script>
+        const $ = s => document.querySelector(s);
+        const $$ = s => [...document.querySelectorAll(s)];
+
+        function loadChecks() {
+            const state = JSON.parse(localStorage.getItem('aiRoadmapChecks') || '{}');
+            $$('.roadmap-check, .project-check').forEach(cb => {
+                cb.checked = !!state[cb.dataset.key];
+                cb.addEventListener('change', () => {
+                    state[cb.dataset.key] = cb.checked;
+                    localStorage.setItem('aiRoadmapChecks', JSON.stringify(state));
+                    updateProgress();
+                });
+            });
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const roadmap = $$('.roadmap-check');
+            const done = roadmap.filter(x => x.checked).length;
+            const pct = roadmap.length ? Math.round(done * 100 / roadmap.length) : 0;
+            $('#overallPct').textContent = pct + '%';
+            $('#overallBar').style.width = pct + '%';
+
+            $$('.phase-card').forEach(card => {
+                const checks = [...card.querySelectorAll('.roadmap-check')];
+                const c = checks.filter(x => x.checked).length;
+                const p = checks.length ? Math.round(c * 100 / checks.length) : 0;
+                card.querySelector('.phase-bar').style.width = p + '%';
+                card.querySelector('.phase-pct').textContent = p + '% complete';
+            });
+        }
+
+        function saveDaily() {
+            const data = {
+                date: $('#dayDate').value, topic: $('#dayTopic').value,
+                study: $('#studyMin').value, code: $('#codeMin').value,
+                review: $('#reviewMin').value, notes: $('#notes').value
+            };
+            localStorage.setItem('aiRoadmapDaily', JSON.stringify(data));
+            $('#saveMsg').textContent = 'Saved in this browser.';
+        }
+
+        function loadDaily() {
+            const d = JSON.parse(localStorage.getItem('aiRoadmapDaily') || 'null');
+            if (!d) return;
+            $('#dayDate').value = d.date || ''; $('#dayTopic').value = d.topic || '';
+            $('#studyMin').value = d.study || 0; $('#codeMin').value = d.code || 0;
+            $('#reviewMin').value = d.review || 0; $('#notes').value = d.notes || '';
+        }
+
+        function clearDaily() {
+            localStorage.removeItem('aiRoadmapDaily');
+            ['dayDate', 'dayTopic', 'notes'].forEach(id => $('#' + id).value = '');
+            ['studyMin', 'codeMin', 'reviewMin'].forEach(id => $('#' + id).value = 0);
+            $('#saveMsg').textContent = 'Cleared.';
+        }
+
+        function saveMastery() {
+            const rec = {
+                topic: $('#masteryTopic').value.trim(),
+                basic: +$('#mBasic').value || 0, inter: +$('#mInter').value || 0,
+                adv: +$('#mAdv').value || 0, debug: +$('#mDebug').value || 0,
+                project: $('#mProject').value, time: new Date().toLocaleString()
+            };
+            if (!rec.topic) { $('#masteryResult').textContent = 'Enter a topic first.'; return; }
+            rec.avg = Math.round((rec.basic + rec.inter + rec.adv + rec.debug) / 4);
+            rec.status = rec.avg >= 90 ? 'Strong mastery' : rec.avg >= 80 ? 'Pass' : rec.avg >= 70 ? 'Targeted revision' : 'Do not advance';
+            const arr = JSON.parse(localStorage.getItem('aiMasteryHistory') || '[]');
+            arr.unshift(rec); localStorage.setItem('aiMasteryHistory', JSON.stringify(arr.slice(0, 30)));
+            $('#masteryResult').textContent = rec.topic + ': ' + rec.avg + '% — ' + rec.status;
+            renderMastery();
+        }
+
+        function renderMastery() {
+            const arr = JSON.parse(localStorage.getItem('aiMasteryHistory') || '[]');
+            $('#masteryHistory').innerHTML = arr.slice(0, 8).map(r =>
+                `<div class="item"><span><strong>${r.topic}</strong><br><span class="muted">${r.avg}% • ${r.status} • Project: ${r.project}</span></span></div>`
+            ).join('');
+        }
+
+        loadChecks(); loadDaily(); renderMastery();
+    </script>
+</body>
+
+</html>
