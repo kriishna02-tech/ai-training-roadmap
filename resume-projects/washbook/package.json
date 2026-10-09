@@ -1,0 +1,39 @@
+{
+  "name": "washbook",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "functions"
+  ],
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "node --test functions/tests/domain.test.mjs",
+    "test:integration": "node --test --test-concurrency=1 functions/tests/integration.test.mjs tests/rules.test.mjs",
+    "test:emulator": "firebase emulators:exec --project demo-washbook --only firestore,auth 'npm run test:integration'",
+    "test:callables": "node --test tests/callables.test.mjs",
+    "test:full-emulator": "firebase emulators:exec --project demo-washbook --only firestore,auth 'npm run test:integration && npm run test:callables'",
+    "emulators": "firebase emulators:start --project demo-washbook --only firestore,auth,functions",
+    "seed": "node functions/scripts/seed.mjs"
+  },
+  "dependencies": {
+    "firebase": "^12.0.0",
+    "lucide-react": "^0.468.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^5.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "express": "^4.22.1",
+    "firebase-tools": "^15.33.0",
+    "typescript": "^5.9.0",
+    "vite": "^6.3.0"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

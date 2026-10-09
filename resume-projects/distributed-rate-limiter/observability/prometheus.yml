@@ -1,0 +1,10 @@
+global:
+  scrape_interval: 5s
+scrape_configs:
+  - job_name: rate-limiter
+    metrics_path: /metrics
+    authorization:
+      type: Bearer
+      credentials: local-metrics-token
+    static_configs:
+      - targets: [api:8000]

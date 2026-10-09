@@ -1,0 +1,8 @@
+{
+  "title": "Distributed Rate Limiter", "uid": "rate-limiter", "schemaVersion": 39,
+  "time": {"from": "now-15m", "to": "now"}, "refresh": "5s",
+  "panels": [
+    {"id": 1, "title": "Requests per second", "type": "timeseries", "gridPos": {"x": 0, "y": 0, "w": 12, "h": 8}, "datasource": {"type": "prometheus", "uid": "prometheus"}, "targets": [{"refId": "A", "expr": "sum by(outcome) (rate(rate_limit_decisions_total[1m]))", "legendFormat": "{{outcome}}"}]},
+    {"id": 2, "title": "Redis p95 latency (seconds)", "type": "timeseries", "gridPos": {"x": 12, "y": 0, "w": 12, "h": 8}, "datasource": {"type": "prometheus", "uid": "prometheus"}, "targets": [{"refId": "A", "expr": "histogram_quantile(0.95, sum by(le) (rate(rate_limit_redis_seconds_bucket[1m])))"}]}
+  ]
+}
