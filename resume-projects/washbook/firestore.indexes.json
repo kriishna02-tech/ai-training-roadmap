@@ -1,0 +1,7 @@
+{
+  "indexes": [
+    {"collectionGroup": "sessions", "queryScope": "COLLECTION", "fields": [{"fieldPath":"ownerUid","order":"ASCENDING"},{"fieldPath":"startedAt","order":"DESCENDING"}]},
+    {"collectionGroup": "sessions", "queryScope": "COLLECTION", "fields": [{"fieldPath":"status","order":"ASCENDING"},{"fieldPath":"endsAt","order":"ASCENDING"}]}
+  ],
+  "fieldOverrides": []
+}

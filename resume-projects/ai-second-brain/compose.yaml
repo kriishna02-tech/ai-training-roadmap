@@ -1,0 +1,23 @@
+services:
+  brain:
+    build: .
+    env_file: .env
+    environment:
+      DATA_DIR: /app/data
+      QDRANT_URL: http://qdrant:6333
+    ports: ["127.0.0.1:8001:8000"]
+    volumes: ["brain-data:/app/data"]
+    depends_on: [qdrant]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 15s
+      timeout: 3s
+      retries: 5
+  qdrant:
+    image: qdrant/qdrant:v1.19.1
+    volumes: ["qdrant-data:/qdrant/storage"]
+    restart: unless-stopped
+volumes:
+  brain-data:
+  qdrant-data:
